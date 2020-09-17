@@ -33,3 +33,11 @@ C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api
 C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.Swagger.dll
 C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerGen.dll
 C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\bin\Debug\netcoreapp3.1\Swashbuckle.AspNetCore.SwaggerUI.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\bin\Debug\netcoreapp3.1\RabbitMQ.Client.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\bin\Debug\netcoreapp3.1\EventBusRabbitMQ.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\bin\Debug\netcoreapp3.1\EventBusRabbitMQ.pdb
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\bin\Debug\netcoreapp3.1\AutoMapper.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\bin\Debug\netcoreapp3.1\AutoMapper.Extensions.Microsoft.DependencyInjection.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\obj\Debug\netcoreapp3.1\Basket.Api.csproj.CoreCompileInputs.cache
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\obj\Debug\netcoreapp3.1\Basket.Api.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\src\Basket\Basket.Api\obj\Debug\netcoreapp3.1\Basket.Api.MvcApplicationPartsAssemblyInfo.cache
