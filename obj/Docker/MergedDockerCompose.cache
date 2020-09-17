@@ -1,0 +1,25 @@
+services:
+  catalog.api:
+    build:
+      context: C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp
+      dockerfile: src/Catalog/Catalog.API/Dockerfile
+    depends_on:
+    - catalogdb
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      CatalogDatabaseSettings:ConnectionString: mongodb://catalogdb:27017
+    image: catalogapi
+    ports:
+    - 8000:80/tcp
+    volumes:
+    - /.aspnet/https:/root/.aspnet/https/:rw
+    - /.microsoft/usersecrets:/root/.microsoft/usersecrets:rw
+  catalogdb:
+    container_name: catalogdb
+    image: mongo
+    ports:
+    - 27017:27017/tcp
+    restart: always
+    volumes:
+    - /site:/data/db:rw
+version: '3.4'
