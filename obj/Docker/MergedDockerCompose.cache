@@ -1,4 +1,27 @@
 services:
+  basket.api:
+    build:
+      context: C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp
+      dockerfile: src/Basket/Basket.Api/Dockerfile
+    depends_on:
+    - basketdb
+    - rabbitmq
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings:Redis: basketdb:6379
+      EventBus:HostName: rabbitmq
+    image: basketapi
+    ports:
+    - 8001:80/tcp
+    volumes:
+    - /.aspnet/https:/root/.aspnet/https/:rw
+    - /.microsoft/usersecrets:/root/.microsoft/usersecrets:rw
+  basketdb:
+    container_name: basketdb
+    image: redis
+    ports:
+    - 6379:6379/tcp
+    restart: always
   catalog.api:
     build:
       context: C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp
@@ -22,4 +45,11 @@ services:
     restart: always
     volumes:
     - /site:/data/db:rw
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    ports:
+    - 5672:5672/tcp
+    - 15672:15672/tcp
+    restart: always
 version: '3.4'
