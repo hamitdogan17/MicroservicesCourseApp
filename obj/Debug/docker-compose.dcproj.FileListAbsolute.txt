@@ -60,3 +60,14 @@ C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Ordering.AP
 C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Ordering.Infrastructure.pdb
 C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Ordering.Core.pdb
 C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Ordering.Application.pdb
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\ocelot.json
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\OcelotAPIGateway.exe
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\OcelotAPIGateway.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Ocelot.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Microsoft.Extensions.DiagnosticAdapter.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\FluentValidation.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Microsoft.AspNetCore.Mvc.NewtonsoftJson.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Microsoft.AspNetCore.MiddlewareAnalysis.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Microsoft.AspNetCore.JsonPatch.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\Newtonsoft.Json.Bson.dll
+C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp\bin\Debug\OcelotAPIGateway.pdb
