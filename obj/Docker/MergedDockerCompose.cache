@@ -1,8 +1,28 @@
 services:
+  aspnetrunbasics:
+    build:
+      context: C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp
+      dockerfile: src/WebApp/AspnetRunBasics/Dockerfile
+    container_name: aspnetrunbasics
+    depends_on:
+    - basket.api
+    - catalog.api
+    - ocelotapigateway
+    - ordering.api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ApiSettings:BaseAddress: ocelotapigateway
+    image: aspnetrunbasics
+    ports:
+    - 8003:80/tcp
+    volumes:
+    - C:\Users\HAMIT.DOGAN\AppData\Roaming\ASP.NET\Https:/root/.aspnet/https:ro
+    - C:\Users\HAMIT.DOGAN\AppData\Roaming\Microsoft\UserSecrets:/root/.microsoft/usersecrets:ro
   basket.api:
     build:
       context: C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp
       dockerfile: src/Basket/Basket.Api/Dockerfile
+    container_name: basketapi
     depends_on:
     - basketdb
     - rabbitmq
@@ -26,6 +46,7 @@ services:
     build:
       context: C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp
       dockerfile: src/Catalog/Catalog.API/Dockerfile
+    container_name: catalogapi
     depends_on:
     - catalogdb
     environment:
@@ -45,6 +66,50 @@ services:
     restart: always
     volumes:
     - /site:/data/db:rw
+  ocelotapigateway:
+    build:
+      context: C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp
+      dockerfile: src/ApiGataway/OcelotAPIGateway/Dockerfile
+    container_name: ocelotapigateway
+    depends_on:
+    - basket.api
+    - catalog.api
+    - ordering.api
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+    image: ocelotapigateway
+    ports:
+    - 7000:80/tcp
+    volumes:
+    - /.aspnet/https:/root/.aspnet/https/:rw
+    - /.microsoft/usersecrets:/root/.microsoft/usersecrets:rw
+  orderdb:
+    container_name: orderdb
+    environment:
+      ACCEPT_EULA: "Y"
+      SA_PASSWORD: SwN12345678
+    image: mcr.microsoft.com/mssql/server
+    ports:
+    - 1433:1433/tcp
+  ordering.api:
+    build:
+      context: C:\Users\HAMIT.DOGAN\source\courses\MicroservicesCourseApp
+      dockerfile: src/Ordering/Ordering.API/Dockerfile
+    container_name: orderingapi
+    depends_on:
+    - orderdb
+    - rabbitmq
+    environment:
+      ASPNETCORE_ENVIRONMENT: Development
+      ConnectionStrings:OrderConnection: Server=orderdb;Database=OrderDb;User Id=sa;Password=SwN12345678;
+      EventBus:HostName: rabbitmq
+    image: orderingapi
+    ports:
+    - 8002:80/tcp
+    restart: on-failure
+    volumes:
+    - /.aspnet/https:/root/.aspnet/https/:rw
+    - /.microsoft/usersecrets:/root/.microsoft/usersecrets:rw
   rabbitmq:
     container_name: rabbitmq
     image: rabbitmq:3-management
