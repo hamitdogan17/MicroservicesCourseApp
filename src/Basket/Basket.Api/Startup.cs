@@ -1,6 +1,4 @@
 using AutoMapper;
-using Basket.Api.Data;
-using Basket.Api.Data.Interfaces;
 using Basket.Api.Repositories;
 using Basket.Api.Repositories.Interfaces;
 using EventBusRabbitMQ;
@@ -13,7 +11,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Validations.Rules;
 using RabbitMQ.Client;
-using StackExchange.Redis;
 
 namespace Basket.Api
 {
@@ -29,15 +26,13 @@ namespace Basket.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton<ConnectionMultiplexer>(sp =>
+            services.AddStackExchangeRedisCache(options =>
             {
-                var configuration = ConfigurationOptions.Parse(Configuration.GetConnectionString("Redis"), true);
-                return ConnectionMultiplexer.Connect(configuration);
+                options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
             });
 
             services.AddControllers();
 
-            services.AddTransient<IBasketContext, BasketContext>();
             services.AddTransient<IBasketRepository, BasketRepository>();
             services.AddAutoMapper(typeof(Startup));
 

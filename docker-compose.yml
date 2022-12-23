@@ -5,7 +5,10 @@ services:
         image: mongo
 
     basketdb:
-        image: redis
+        image: redis:alpine
+
+    portainer:
+        image: portainer/portainer-ce
 
     rabbitmq:
         image: rabbitmq:3-management

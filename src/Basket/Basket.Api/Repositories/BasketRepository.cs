@@ -1,52 +1,40 @@
-﻿using Basket.Api.Data.Interfaces;
-using Basket.Api.Entities;
+﻿using Basket.Api.Entities;
 using Basket.Api.Repositories.Interfaces;
+using Microsoft.Extensions.Caching.Distributed;
 using Newtonsoft.Json;
+using System;
 using System.Threading.Tasks;
 
 namespace Basket.Api.Repositories
 {
     public class BasketRepository : IBasketRepository
     {
-        private readonly IBasketContext _context;
+        private readonly IDistributedCache _redisCache;
 
-        public BasketRepository(IBasketContext context)
+        public BasketRepository(IDistributedCache redisCache)
         {
-            _context = context;
+            _redisCache = redisCache ?? throw new ArgumentNullException(nameof(redisCache));
         }
 
         public async Task<BasketCart> GetBasket(string userName)
         {
-            var basket = await _context
-                                .Redis
-                                .StringGetAsync(userName);
-            if (basket.IsNullOrEmpty)
-            {
-                return null;
-            }
+            var basket = await _redisCache.GetStringAsync(userName);
+
+            if (string.IsNullOrEmpty(basket)) return null;
 
             return JsonConvert.DeserializeObject<BasketCart>(basket);
         }
 
         public async Task<BasketCart> UpdateBasket(BasketCart basket)
         {
-            var updated = await _context
-                                    .Redis
-                                    .StringSetAsync(basket.UserName, JsonConvert.SerializeObject(basket));
-
-            if (!updated)
-            {
-                return null;
-            }
+            await _redisCache.SetStringAsync(basket.UserName, JsonConvert.SerializeObject(basket));
 
             return await GetBasket(basket.UserName);
         }
 
-        public async Task<bool> DeleteBasket(string userName)
+        public async Task DeleteBasket(string userName)
         {
-            return await _context
-                            .Redis
-                            .KeyDeleteAsync(userName);
+            await _redisCache.RemoveAsync(userName);
         }
     }
 }

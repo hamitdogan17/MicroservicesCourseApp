@@ -5,7 +5,6 @@ using EventBusRabbitMQ.Common;
 using EventBusRabbitMQ.Events;
 using EventBusRabbitMQ.Producer;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using System;
 using System.Net;
 using System.Threading.Tasks;
@@ -27,7 +26,7 @@ namespace Basket.Api.Controllers
             _eventBus = eventBus;
         }
 
-        [HttpGet]
+        [HttpGet("{userName}", Name = "GetBasket")]
         [ProducesResponseType(typeof(BasketCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<BasketCart>> GetBasket(string userName)
         {
@@ -43,11 +42,12 @@ namespace Basket.Api.Controllers
             return Ok(await _repository.UpdateBasket(basket));
         }
 
-        [HttpDelete("{userName}")]
+        [HttpDelete("{userName}", Name = "DeleteBasket")]
         [ProducesResponseType(typeof(void), (int)HttpStatusCode.OK)]
         public async Task<ActionResult> DeleteBasket(string userName)
         {
-            return Ok(await _repository.DeleteBasket(userName));
+            await _repository.DeleteBasket(userName);
+            return Ok();
         }
 
         [Route("[action]")]
@@ -66,11 +66,7 @@ namespace Basket.Api.Controllers
                 return BadRequest();
             }
 
-            var basketRemoved = await _repository.DeleteBasket(basket.UserName);
-            if (!basketRemoved)
-            {
-                return BadRequest();
-            }
+            await _repository.DeleteBasket(basket.UserName);
 
             var eventMessage = _mapper.Map<BasketCheckoutEvent>(basketCheckout);
             eventMessage.RequestId = Guid.NewGuid();
