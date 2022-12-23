@@ -7,6 +7,12 @@ services:
     basketdb:
         image: redis:alpine
 
+    discountdb:
+        image: postgres
+
+    pgadmin:
+        image: dpage/pgadmin4
+
     portainer:
         image: portainer/portainer-ce
 
@@ -41,4 +47,14 @@ services:
         build:
             context: .
             dockerfile: src/WebApp/AspnetRunBasics/Dockerfile
+    discount.api:
+        image: ${DOCKER_REGISTRY-}discountapi
+        build:
+            context: .
+            dockerfile: src/Discount/Discount.API/Dockerfile
 
+volumes:
+    mongo_data:
+    portainer_data:
+    postgres_data:
+    pgadmin_data:
