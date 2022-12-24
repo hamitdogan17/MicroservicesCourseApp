@@ -1,6 +1,8 @@
 using AutoMapper;
+using Basket.Api.GrpcServices;
 using Basket.Api.Repositories;
 using Basket.Api.Repositories.Interfaces;
+using Discount.Grpc.Protos;
 using EventBusRabbitMQ;
 using EventBusRabbitMQ.Producer;
 using Microsoft.AspNetCore.Builder;
@@ -11,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.OpenApi.Validations.Rules;
 using RabbitMQ.Client;
+using System;
 
 namespace Basket.Api
 {
@@ -35,6 +38,9 @@ namespace Basket.Api
 
             services.AddTransient<IBasketRepository, BasketRepository>();
             services.AddAutoMapper(typeof(Startup));
+            services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
+                (o => o.Address = new Uri(Configuration["GrpcSettings:DiscountUrl"]));
+            services.AddScoped<DiscountGrpcService>();
 
             services.AddSwaggerGen(c =>
             {

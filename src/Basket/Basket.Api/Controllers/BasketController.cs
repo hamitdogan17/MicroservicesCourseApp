@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Basket.Api.Entities;
+using Basket.Api.GrpcServices;
 using Basket.Api.Repositories.Interfaces;
 using EventBusRabbitMQ.Common;
 using EventBusRabbitMQ.Events;
@@ -18,12 +19,14 @@ namespace Basket.Api.Controllers
         private readonly IBasketRepository _repository;
         private readonly IMapper _mapper;
         private readonly EventBusRabbitMQProducer _eventBus;
+        private readonly DiscountGrpcService _discountGrpcService;
 
-        public BasketController(IBasketRepository repository, IMapper mapper, EventBusRabbitMQProducer eventBus)
+        public BasketController(IBasketRepository repository, IMapper mapper, EventBusRabbitMQProducer eventBus, DiscountGrpcService discountGrpcService)
         {
             _repository = repository;
             _mapper = mapper;
             _eventBus = eventBus;
+            _discountGrpcService = discountGrpcService;
         }
 
         [HttpGet("{userName}", Name = "GetBasket")]
@@ -39,6 +42,12 @@ namespace Basket.Api.Controllers
         [ProducesResponseType(typeof(BasketCart), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<BasketCart>> UpdateBasket([FromBody]BasketCart basket)
         {
+            // consume Discount grpc 
+            foreach (var item in basket.Items)
+            {
+                var coupon = await _discountGrpcService.GetDiscount(item.ProductName);
+                item.Price -= coupon.Amount;
+            }
             return Ok(await _repository.UpdateBasket(basket));
         }
 
@@ -56,12 +65,8 @@ namespace Basket.Api.Controllers
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
         public async Task<ActionResult> Checkout([FromBody] BasketCheckout basketCheckout)
         {
-            // Get total price of basket
-            // remove the basket
-            // send checkout event to rabbitmq
-
             var basket = await _repository.GetBasket(basketCheckout.UserName);
-            if(basket == null)
+            if (basket == null)
             {
                 return BadRequest();
             }
