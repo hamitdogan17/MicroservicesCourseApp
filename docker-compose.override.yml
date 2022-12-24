@@ -50,11 +50,12 @@ services:
 
     orderdb:
         container_name: orderdb
-        ports:
-            - "1433:1433"
         environment:
             SA_PASSWORD: "SwN12345678"
             ACCEPT_EULA: "Y"
+        restart: always
+        ports:
+            - "1433:1433"
 
     rabbitmq:
         container_name: rabbitmq
@@ -64,7 +65,7 @@ services:
             - "15672:15672"
 
     catalog.api:
-        container_name: catalogapi
+        container_name: catalog.api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - "CatalogDatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
@@ -76,7 +77,7 @@ services:
         ports:
             - "8000:80"
     basket.api:
-        container_name: basketapi
+        container_name: basket.api
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
             - "CacheSettings:ConnectionString=basketdb:6379"
@@ -91,7 +92,7 @@ services:
         ports:
             - "8001:80"
     ordering.api:
-        container_name: orderingapi
+        container_name: ordering.api
         restart: on-failure
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
