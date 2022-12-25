@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using AspnetRunBasics.ApiCollection.Interfaces;
 using AspnetRunBasics.Models;
+using AspnetRunBasics.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,13 +9,13 @@ namespace AspnetRunBasics
 {
     public class CheckOutModel : PageModel
     {
-        private readonly ICatalogApi _catalogApi;
-        private readonly IBasketApi _basketApi;
+        private readonly IBasketService _basketService;
+        private readonly IOrderService _orderService;
 
-        public CheckOutModel(ICatalogApi catalogApi, IBasketApi basketApi)
+        public CheckOutModel(IBasketService basketService, IOrderService orderService)
         {
-            _catalogApi = catalogApi ?? throw new ArgumentNullException(nameof(catalogApi));
-            _basketApi = basketApi ?? throw new ArgumentNullException(nameof(basketApi));
+            _basketService = basketService ?? throw new ArgumentNullException(nameof(basketService));
+            _orderService = orderService ?? throw new ArgumentNullException(nameof(orderService));
         }
 
         [BindProperty]
@@ -26,7 +26,7 @@ namespace AspnetRunBasics
         public async Task<IActionResult> OnGetAsync()
         {
             var userName = "swn";
-            Cart = await _basketApi.GetBasket(userName);
+            Cart = await _basketService.GetBasket(userName);
 
             return Page();
         }
@@ -34,7 +34,7 @@ namespace AspnetRunBasics
         public async Task<IActionResult> OnPostCheckOutAsync()
         {
             var userName = "swn";
-            Cart = await _basketApi.GetBasket(userName);
+            Cart = await _basketService.GetBasket(userName);
 
             if (!ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace AspnetRunBasics
             Order.UserName = userName;
             Order.TotalPrice = Cart.TotalPrice;
 
-            await _basketApi.CheckoutBasket(Order);
+            await _basketService.CheckoutBasket(Order);
 
             return RedirectToPage("Confirmation", "OrderSubmitted");
         }

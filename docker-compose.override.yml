@@ -125,17 +125,15 @@ services:
         container_name: aspnetrunbasics
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
-            - "ApiSettings:BaseAddress=ocelotapigateway"
+            - "ApiSettings:BaseAddress=ocelotapigW"
         depends_on:
             - catalog.api
             - basket.api
             - ordering.api
             - ocelotapigw
-        volumes:
-            - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
-            - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+            - discount.api
         ports:
-            - "8009:80"
+            - "8006:80"
 
     discount.api:
         container_name: discount.api
@@ -157,7 +155,7 @@ services:
         ports:
             - "8003:80"
 
-    dshopping.aggregator:
+    shopping.aggregator:
         container_name: shopping.aggregator
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
