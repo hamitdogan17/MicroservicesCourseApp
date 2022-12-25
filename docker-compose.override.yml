@@ -76,6 +76,7 @@ services:
             - ${HOME}/.aspnet/https:/root/.aspnet/https/
         ports:
             - "8000:80"
+
     basket.api:
         container_name: basket.api
         environment:
@@ -91,6 +92,7 @@ services:
             - ${HOME}/.aspnet/https:/root/.aspnet/https/
         ports:
             - "8001:80"
+
     ordering.api:
         container_name: ordering.api
         restart: on-failure
@@ -106,19 +108,19 @@ services:
             - ${HOME}/.aspnet/https:/root/.aspnet/https/
         ports:
             - "8004:80"
-    ocelotapigateway:
-        container_name: ocelotapigateway
+
+    ocelotapigw:
+        container_name: ocelotapigw
         environment:
             - ASPNETCORE_ENVIRONMENT=Development
         depends_on:
             - catalog.api
             - basket.api
+            - discount.api
             - ordering.api
-        volumes:
-            - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
-            - ${HOME}/.aspnet/https:/root/.aspnet/https/
         ports:
-            - "7000:80"
+            - "8010:80"
+
     aspnetrunbasics:
         container_name: aspnetrunbasics
         environment:
@@ -128,7 +130,7 @@ services:
             - catalog.api
             - basket.api
             - ordering.api
-            - ocelotapigateway
+            - ocelotapigw
         volumes:
             - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
             - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro

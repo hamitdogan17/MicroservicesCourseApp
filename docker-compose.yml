@@ -37,11 +37,11 @@ services:
         build:
             context: .
             dockerfile: src/Services/Ordering/Ordering.API/Dockerfile
-    ocelotapigateway:
-        image: ${DOCKER_REGISTRY-}ocelotapigateway
+    ocelotapigw:
+        image: ${DOCKER_REGISTRY-}ocelotapigw
         build:
             context: .
-            dockerfile: src/ApiGataway/OcelotAPIGateway/Dockerfile
+            dockerfile: src/ApiGateways/OcelotApiGw/Dockerfile
     aspnetrunbasics:
         image: ${DOCKER_REGISTRY-}aspnetrunbasics
         build:
