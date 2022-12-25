@@ -8,7 +8,6 @@ FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["src/Services/Basket/Basket.Api/Basket.Api.csproj", "src/Services/Basket/Basket.Api/"]
 COPY ["src/BuildingBlocks/EventBus.Message/EventBus.Message.csproj", "src/BuildingBlocks/EventBus.Message/"]
-COPY ["src/Common/EventBusRabbitMQ/EventBusRabbitMQ.csproj", "src/Common/EventBusRabbitMQ/"]
 RUN dotnet restore "src/Services/Basket/Basket.Api/Basket.Api.csproj"
 COPY . .
 WORKDIR "/src/src/Services/Basket/Basket.Api"

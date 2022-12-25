@@ -6,10 +6,10 @@ EXPOSE 80
 
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
-COPY ["src/Discount/Discount.Grpc/Discount.Grpc.csproj", "src/Discount/Discount.Grpc/"]
-RUN dotnet restore "src/Discount/Discount.Grpc/Discount.Grpc.csproj"
+COPY ["src/Services/Discount/Discount.Grpc/Discount.Grpc.csproj", "src/Services/Discount/Discount.Grpc/"]
+RUN dotnet restore "src/Services/Discount/Discount.Grpc/Discount.Grpc.csproj"
 COPY . .
-WORKDIR "/src/src/Discount/Discount.Grpc"
+WORKDIR "/src/src/Services/Discount/Discount.Grpc"
 RUN dotnet build "Discount.Grpc.csproj" -c Release -o /app/build
 
 FROM build AS publish
