@@ -105,7 +105,7 @@ services:
             - ${HOME}/.microsoft/usersecrets/:/root/.microsoft/usersecrets
             - ${HOME}/.aspnet/https:/root/.aspnet/https/
         ports:
-            - "8002:80"
+            - "8004:80"
     ocelotapigateway:
         container_name: ocelotapigateway
         environment:
