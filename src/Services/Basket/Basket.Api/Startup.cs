@@ -1,18 +1,14 @@
-using AutoMapper;
 using Basket.Api.GrpcServices;
 using Basket.Api.Repositories;
 using Basket.Api.Repositories.Interfaces;
 using Discount.Grpc.Protos;
-using EventBusRabbitMQ;
-using EventBusRabbitMQ.Producer;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
-using Microsoft.OpenApi.Validations.Rules;
-using RabbitMQ.Client;
 using System;
 
 namespace Basket.Api
@@ -29,6 +25,7 @@ namespace Basket.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //Redis configuration
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
@@ -36,8 +33,11 @@ namespace Basket.Api
 
             services.AddControllers();
 
+            // General Configuration 
             services.AddTransient<IBasketRepository, BasketRepository>();
             services.AddAutoMapper(typeof(Startup));
+
+            // Grpc Configuration 
             services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
                 (o => o.Address = new Uri(Configuration["GrpcSettings:DiscountUrl"]));
             services.AddScoped<DiscountGrpcService>();
@@ -47,27 +47,13 @@ namespace Basket.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket API", Version = "v1" });
             });
 
-            services.AddSingleton<IRabbitMQConnection>(sp =>
-            {
-                var factory = new ConnectionFactory()
-                {
-                    HostName = Configuration["EventBus:HostName"]
-                };
-
-                if (string.IsNullOrEmpty(Configuration["EventBus:UserName"]))
-                {
-                    factory.UserName = Configuration["EventBus:UserName"];
-                }
-
-                if (string.IsNullOrEmpty(Configuration["EventBus:Password"]))
-                {
-                    factory.UserName = Configuration["EventBus:Password"];
-                }
-
-                return new RabbitMQConnection(factory);
+            // MassTransit-RabbitMq Configuration 
+            services.AddMassTransit(config => {
+                config.UsingRabbitMq((ctx, cfg0) => {
+                    cfg0.Host(Configuration["EventBusSettings:HostAddress"]);
+                });
             });
-
-            services.AddSingleton<EventBusRabbitMQProducer>();
+            services.AddMassTransitHostedService();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Basket.Api.Entities;
-using EventBusRabbitMQ.Events;
+using EventBus.Message.Events;
 
 namespace Basket.Api.Mapping
 {
